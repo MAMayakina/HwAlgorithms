@@ -1,81 +1,80 @@
 package com.skypro.algorithms;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AlgorithmsService implements AlgorithmsInterface {
     private final static int COUNT = 10;
-    public static List<String> fruits = new ArrayList<>(COUNT);
+    public static List<Integer> numbers = new ArrayList<>(COUNT);
 
-    public static List<String> getFruits() {
-        return fruits;
+    public static List<Integer> getNumbers() {
+        return numbers;
     }
 
-    public static void clearFruits() {
-        fruits.clear();
+    public static void clearNumbers() {
+        numbers.clear();
     }
 
     // Добавление элемента.
     // Вернуть добавленный элемент в качестве результата выполнения.
-    public String add(String item) {
+    public Integer add(Integer item) {
         if (item == null) {
             throw new IllegalArgumentException("Некорректные входные данные");
         }
-        fruits.add(item);
+        numbers.add(item);
         return item;
     }
 
     // Добавление элемента на определенную позицию списка.
     // Если выходит за пределы фактического количества элементов или массива, выбросить исключение.
     // Вернуть добавленный элемент в качестве результата выполнения.
-    public String add(int index, String item) {
-        if (item == null || index >= fruits.size()) {
+    public Integer add(int index, Integer item) {
+        if (item == null || index >= numbers.size()) {
             throw new IllegalArgumentException("Некорректные входные данные");
         } else {
-            fruits.add(index, item);
+            numbers.add(index, item);
         }
         return item;
     }
 
     // Установить элемент на определенную позицию, затерев существующий.
     // Выбросить исключение, если индекс больше фактического количества элементов или выходит за пределы массива.
-    public String set(int index, String item) {
-        if (item == null || index >= fruits.size()) {
+    public Integer set(int index, Integer item) {
+        if (item == null || index >= numbers.size()) {
             throw new IllegalArgumentException("Некорректные входные данные");
         } else {
-            fruits.set(index, item);
+            numbers.set(index, item);
         }
         return item;
     }
 
     // Удаление элемента.
     // Вернуть удаленный элемент или исключение, если подобный элемент отсутствует в списке.
-    public String remove(String item) {
-        if (item != null && fruits.contains(item)) {
-            fruits.remove(item);
-        } else {
-            throw new IllegalArgumentException("Некорректные входные данные");
+    public Integer remove(Integer item) {
+        if (item != null && numbers.contains(item)) {
+            numbers.remove(item);
         }
-        return item;
+        return 0;
     }
 
     // Удаление элемента по индексу.
     // Вернуть удаленный элемент или исключение, если подобный элемент отсутствует в списке.
-    public String remove(int index) {
-        String removeFruit;
-        if (index < fruits.size()) {
-            removeFruit = fruits.get(index);
-            fruits.remove(index);
+    public Integer remove(int index) {
+        Integer removeNumber;
+        if (index < numbers.size()) {
+            removeNumber = numbers.get(index);
+            numbers.remove(index);
         } else {
             throw new IllegalArgumentException("Некорректные входные данные");
         }
-        return removeFruit;
+        return removeNumber;
     }
 
     // Проверка на существование элемента.
     // Вернуть true/false;
-    public boolean contains(String item) {
-        if (item != null && fruits.contains(item)) {
+    public boolean contains(Integer item) {
+        if (item != null && numbers.contains(item)) {
             return true;
         }
         return false;
@@ -83,9 +82,9 @@ public class AlgorithmsService implements AlgorithmsInterface {
 
     // Поиск элемента.
     // Вернуть индекс элемента или -1 в случае отсутствия.
-    public int indexOf(String item) {
-        if (item != null && fruits.contains(item)) {
-            return fruits.indexOf(item);
+    public int indexOf(Integer item) {
+        if (item != null && numbers.contains(item)) {
+            return numbers.indexOf(item);
         } else {
             return -1;
         }
@@ -93,9 +92,9 @@ public class AlgorithmsService implements AlgorithmsInterface {
 
     // Поиск элемента с конца.
     // Вернуть индекс элемента или -1 в случае отсутствия.
-    public int lastIndexOf(String item) {
-        if (item != null && fruits.contains(item)) {
-            return fruits.lastIndexOf(item);
+    public int lastIndexOf(Integer item) {
+        if (item != null && numbers.contains(item)) {
+            return numbers.lastIndexOf(item);
         } else {
             return -1;
         }
@@ -103,9 +102,9 @@ public class AlgorithmsService implements AlgorithmsInterface {
 
     // Получить элемент по индексу.
     // Вернуть элемент или исключение, если выходит за рамки фактического количества элементов.
-    public String get(int index) {
-        if (index < fruits.size()) {
-            return fruits.get(index);
+    public Integer get(int index) {
+        if (index < numbers.size()) {
+            return numbers.get(index);
         } else {
             throw new IllegalArgumentException("Некорректные входные данные");
         }
@@ -116,7 +115,7 @@ public class AlgorithmsService implements AlgorithmsInterface {
     public boolean equals(List otherList) {
         if (otherList == null) {
             throw new IllegalArgumentException("Некорректные входные данные");
-        } else if (fruits.equals(otherList)) {
+        } else if (numbers.equals(otherList)) {
             return true;
         }
         return false;
@@ -124,27 +123,38 @@ public class AlgorithmsService implements AlgorithmsInterface {
 
     // Вернуть фактическое количество элементов.
     public int size() {
-        return fruits.size();
+        return numbers.size();
     }
 
     // Вернуть true, если элементов в списке нет, иначе false.
     public boolean isEmpty() {
-        return fruits.isEmpty();
+        return numbers.isEmpty();
     }
 
     // Удалить все элементы из списка.
     public void clear() {
-        fruits.clear();
+        numbers.clear();
     }
 
     // Создать новый массив из строк в списке и вернуть его.
-    public String[] toArray() {
-        String[] array = new String[fruits.size()];
+    public Integer[] toArray() {
+        Integer[] array = new Integer[numbers.size()];
         int i = 0;
-        for (String fruit : fruits) {
-            array[i] = fruit;
+        for (Integer number : numbers) {
+            array[i] = number;
             i++;
         }
         return array;
+    }
+
+    //Сортировка массива
+    public List<Integer> sort(){
+        Collections.sort(numbers);
+        return numbers;
+    }
+
+    //Бинарный поиск
+    public int binarySearch(Integer number){
+        return Collections.binarySearch(numbers, number);
     }
 }

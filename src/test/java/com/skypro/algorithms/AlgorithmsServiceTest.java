@@ -8,65 +8,70 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
 public class AlgorithmsServiceTest {
     private AlgorithmsService algorithmsService;
-    private List<String> expected;
+    private List<Integer> expected;
 
     @BeforeEach
     public void setup() {
-        String fruit1 = "Яблоко";
-        String fruit2 = "Груша";
-        String fruit3 = "Банан";
+        Integer number1 = generateNumber();
+        Integer number2 = generateNumber();
+        Integer number3 = generateNumber();
 
         algorithmsService = new AlgorithmsService();
-        algorithmsService.clearFruits();
-        algorithmsService.add(fruit1);
-        algorithmsService.add(fruit2);
-        algorithmsService.add(fruit3);
+        algorithmsService.clearNumbers();
+        algorithmsService.add(number1);
+        algorithmsService.add(number2);
+        algorithmsService.add(number3);
 
         expected = new ArrayList<>();
-        expected.add(fruit1);
-        expected.add(fruit2);
-        expected.add(fruit3);
+        expected.add(number1);
+        expected.add(number2);
+        expected.add(number3);
+    }
+
+    private Integer generateNumber(){
+        return (int)(Math.random()*100);
     }
 
     @ParameterizedTest
     @MethodSource("addTest")
     // Добавление элемента.
-    public void addTest(String item) {
+    public void addTest(Integer item) {
         algorithmsService.add(item);
         expected.add(item);
-        Assertions.assertEquals(expected, algorithmsService.getFruits());
+        Assertions.assertEquals(expected, algorithmsService.getNumbers());
     }
 
     @ParameterizedTest
     @MethodSource("addByIndexTest")
     // Добавление элемента на определенную позицию списка.
-    public void addByIndexTest(int index, String item) {
+    public void addByIndexTest(int index, Integer item) {
         algorithmsService.add(index, item);
         expected.add(index, item);
-        Assertions.assertEquals(expected, algorithmsService.getFruits());
+        Assertions.assertEquals(expected, algorithmsService.getNumbers());
     }
 
     @ParameterizedTest
     @MethodSource("setTest")
     // Установить элемент на определенную позицию, затерев существующий.
-    public void setTest(int index, String item) {
+    public void setTest(int index, Integer item) {
         algorithmsService.set(index, item);
         expected.set(index, item);
-        Assertions.assertEquals(expected, algorithmsService.getFruits());
+        Assertions.assertEquals(expected, algorithmsService.getNumbers());
     }
 
     @ParameterizedTest
     @MethodSource("removeTest")
     // Удаление элемента.
-    public void removeTest(String item) {
+    public void removeTest(Integer item) {
         algorithmsService.remove(item);
         expected.remove(item);
-        Assertions.assertEquals(expected, algorithmsService.getFruits());
+        Assertions.assertEquals(expected, algorithmsService.getNumbers());
     }
 
     @ParameterizedTest
@@ -75,27 +80,27 @@ public class AlgorithmsServiceTest {
     public void removeByIndexTest(int index) {
         algorithmsService.remove(index);
         expected.remove(index);
-        Assertions.assertEquals(expected, algorithmsService.getFruits());
+        Assertions.assertEquals(expected, algorithmsService.getNumbers());
     }
 
     @ParameterizedTest
     @MethodSource("containsTest")
     // Проверка на существование элемента.
-    public void containsTest(String item) {
+    public void containsTest(Integer item) {
         Assertions.assertEquals(expected.contains(item), algorithmsService.contains(item));
     }
 
     @ParameterizedTest
     @MethodSource("indexOfTest")
     // Поиск элемента.
-    public void indexOfTest(String item) {
+    public void indexOfTest(Integer item) {
         Assertions.assertEquals(expected.indexOf(item), algorithmsService.indexOf(item));
     }
 
     @ParameterizedTest
     @MethodSource("lastIndexOfTest")
     // Поиск элемента с конца.
-    public void lastIndexOfTest(String item) {
+    public void lastIndexOfTest(Integer item) {
         Assertions.assertEquals(expected.lastIndexOf(item), algorithmsService.lastIndexOf(item));
     }
 
@@ -109,13 +114,13 @@ public class AlgorithmsServiceTest {
     @ParameterizedTest
     @MethodSource("equalsTest")
     // Сравнить текущий список с другим.
-    public void equalsTest(List<String> otherList) {
+    public void equalsTest(List<Integer> otherList) {
         boolean check = true;
         if (otherList.size() != expected.size()) {
             check = false;
         } else {
             int i = 0;
-            for (String item : otherList) {
+            for (Integer item : otherList) {
                 if (expected.get(i) != item) {
                     check = false;
                 }
@@ -141,7 +146,7 @@ public class AlgorithmsServiceTest {
     // Удалить все элементы из списка.
     public void clearTest() {
         algorithmsService.clear();
-        Assertions.assertEquals(0, algorithmsService.getFruits().size());
+        Assertions.assertEquals(0, algorithmsService.getNumbers().size());
     }
 
     @Test
@@ -153,31 +158,50 @@ public class AlgorithmsServiceTest {
         }
     }
 
+    @Test
+    //Сортировка массива
+    public void sort() {
+        List<Integer> actual = algorithmsService.sort();
+        Collections.sort(expected);
+        int i = 0;
+        for (Integer number : actual) {
+            Assertions.assertEquals(expected.get(i), number);
+            i++;
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("binarySearch")
+    //Бинарный поиск
+    public void binarySearch(Integer number) {
+        Assertions.assertEquals(Collections.binarySearch(expected, number), algorithmsService.binarySearch(number));
+    }
+
     public static List<Arguments> addTest() {
         return List.of(
-                Arguments.of("Киви"),
-                Arguments.of("Апельсин")
+                Arguments.of(4),
+                Arguments.of(3)
         );
     }
 
     public static List<Arguments> addByIndexTest() {
         return List.of(
-                Arguments.of(2, "Персик"),
-                Arguments.of(1, "Абрикос")
+                Arguments.of(2, 5),
+                Arguments.of(1, 1)
         );
     }
 
     public static List<Arguments> setTest() {
         return List.of(
-                Arguments.of(1, "Ананас"),
-                Arguments.of(2, "Гранат")
+                Arguments.of(1, 4),
+                Arguments.of(2, 0)
         );
     }
 
     public static List<Arguments> removeTest() {
         return List.of(
-                Arguments.of("Груша"),
-                Arguments.of("Банан")
+                Arguments.of(1),
+                Arguments.of(2)
         );
     }
 
@@ -190,22 +214,22 @@ public class AlgorithmsServiceTest {
 
     public static List<Arguments> containsTest() {
         return List.of(
-                Arguments.of("Киви"),
-                Arguments.of("Банан")
+                Arguments.of(3),
+                Arguments.of(0)
         );
     }
 
     public static List<Arguments> indexOfTest() {
         return List.of(
-                Arguments.of("Яблоко"),
-                Arguments.of("Груша")
+                Arguments.of(1),
+                Arguments.of(2)
         );
     }
 
     public static List<Arguments> lastIndexOfTest() {
         return List.of(
-                Arguments.of("Яблоко"),
-                Arguments.of("Груша")
+                Arguments.of(1),
+                Arguments.of(2)
         );
     }
 
@@ -218,10 +242,16 @@ public class AlgorithmsServiceTest {
 
     public static List<Arguments> equalsTest() {
         return List.of(
-                Arguments.of(List.of("Яблоко", "Груша", "Банан", "Апельсин")),
-                Arguments.of(List.of("Яблоко", "Груша", "Банан"))
+                Arguments.of(List.of(1, 3, 4, 2)),
+                Arguments.of(List.of(1, 3, 4))
         );
     }
 
+    public static List<Arguments> binarySearch() {
+        return List.of(
+                Arguments.of(3),
+                Arguments.of(4)
+        );
+    }
 
 }
