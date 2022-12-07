@@ -56,7 +56,7 @@ public interface AlgorithmsInterface {
     // Создать новый массив из строк в списке и вернуть его.
     Integer[] toArray();
 
-    List<Integer> sort();
+    void quickSort(int begin, int end);
 
     int binarySearch(Integer number);
 }

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.skypro.algorithms.AlgorithmsService.numbers;
+
 
 public class AlgorithmsServiceTest {
     private AlgorithmsService algorithmsService;
@@ -34,8 +36,8 @@ public class AlgorithmsServiceTest {
         expected.add(number3);
     }
 
-    private Integer generateNumber(){
-        return (int)(Math.random()*100);
+    private Integer generateNumber() {
+        return (int) (Math.random() * 100);
     }
 
     @ParameterizedTest
@@ -160,13 +162,12 @@ public class AlgorithmsServiceTest {
 
     @Test
     //Сортировка массива
-    public void sort() {
-        List<Integer> actual = algorithmsService.sort();
-        Collections.sort(expected);
-        int i = 0;
-        for (Integer number : actual) {
-            Assertions.assertEquals(expected.get(i), number);
-            i++;
+    public void quickSort() {
+        algorithmsService.quickSort(0, numbers.size()-1);
+        for (int i=1; i<numbers.size(); i++) {
+            if(numbers.get(i)<numbers.get(i-1)){
+                Assertions.fail("Ошибка");
+            }
         }
     }
 
@@ -186,7 +187,7 @@ public class AlgorithmsServiceTest {
 
     public static List<Arguments> addByIndexTest() {
         return List.of(
-                Arguments.of(2, 5),
+                Arguments.of(2, 9),
                 Arguments.of(1, 1)
         );
     }

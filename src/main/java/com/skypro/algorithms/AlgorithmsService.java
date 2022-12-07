@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class AlgorithmsService implements AlgorithmsInterface {
-    private final static int COUNT = 10;
+    public static int COUNT = 10;
     public static List<Integer> numbers = new ArrayList<>(COUNT);
 
     public static List<Integer> getNumbers() {
@@ -30,11 +30,12 @@ public class AlgorithmsService implements AlgorithmsInterface {
     // Если выходит за пределы фактического количества элементов или массива, выбросить исключение.
     // Вернуть добавленный элемент в качестве результата выполнения.
     public Integer add(int index, Integer item) {
-        if (item == null || index >= numbers.size()) {
+        if (item == null) {
             throw new IllegalArgumentException("Некорректные входные данные");
-        } else {
-            numbers.add(index, item);
+        } else if (index >= numbers.size()) {
+            grow();
         }
+        numbers.add(index, item);
         return item;
     }
 
@@ -148,13 +149,42 @@ public class AlgorithmsService implements AlgorithmsInterface {
     }
 
     //Сортировка массива
-    public List<Integer> sort(){
-        Collections.sort(numbers);
-        return numbers;
+    public void quickSort(int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(begin, end);
+            quickSort(begin, partitionIndex - 1);
+            quickSort(partitionIndex + 1, end);
+        }
+    }
+
+    private int partition(int begin, int end) {
+        Integer pivot = numbers.get(end);
+        int i = (begin - 1);
+        for (int j = begin; j < end; j++) {
+            if (numbers.get(j) <= pivot) {
+                i++;
+                swapElements(i, j);
+            }
+        }
+        swapElements(i + 1, end);
+        return i + 1;
+    }
+
+    private void swapElements( int left, int right) {
+        Integer temp = numbers.get(left);
+        numbers.set(left, numbers.get(right));
+        numbers.set(right, temp);
     }
 
     //Бинарный поиск
-    public int binarySearch(Integer number){
+    public int binarySearch(Integer number) {
         return Collections.binarySearch(numbers, number);
+    }
+
+    private List<Integer> grow() {
+        COUNT = (int) (numbers.size() * 1.5);
+        List<Integer> newNumbers = new ArrayList<>(COUNT);
+        newNumbers = List.copyOf(numbers);
+        return newNumbers;
     }
 }
